@@ -1,0 +1,9 @@
+* selected.el
+
+=selected.el= provides the =selected-minor-mode= for Emacs. When =selected-minor-mode= is active, the keybindings in =selected-keymap= will be enabled when the region is active. This is useful for commands that operates on the region, which you only want bound to a key when the region is active.
+
+=selected-keymap= has no default bindings. Bind it yourself:
+
+#+BEGIN_SRC emacs-lisp
+(define-key selected-keymap (kbd "u") #'upcase-region)
+#+END_SRC
