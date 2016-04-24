@@ -20,7 +20,9 @@
 (defun selected--on ()
   (selected-region-active 1))
 
-(defun selected--off ()
+(defun selected-off ()
+  "Disables bindings in `selected-keymap' temporary."
+  (interactive)
   (selected-region-active -1))
 
 ;;;###autoload
@@ -30,9 +32,9 @@
   (if selected-minor-mode
       (progn 
         (add-hook 'activate-mark-hook #'selected--on)
-        (add-hook 'deactivate-mark-hook #'selected--off))
+        (add-hook 'deactivate-mark-hook #'selected-off))
     (remove-hook 'activate-mark-hook #'selected--on)
-    (remove-hook 'deactivate-mark-hook #'selected--off)
+    (remove-hook 'deactivate-mark-hook #'selected-off)
     (selected--off)))
 
 (provide 'selected)
