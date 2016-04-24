@@ -15,7 +15,17 @@
 
 (define-minor-mode selected-region-active
   "Meant to activate when region becomes active. Not intended for the user. Use `selected-minor-mode'."
-  :keymap selected-keymap)
+  :keymap selected-keymap
+  (when selected-region-active
+    (let ((major-selected-map
+           (intern-soft (concat "selected-" (symbol-name major-mode) "-map"))))
+      (if major-selected-map
+          (setf (cdr (assoc 'selected-region-active minor-mode-map-alist))
+                (let ((map (eval major-selected-map)))
+                  (set-keymap-parent map selected-keymap)
+                  map))
+        (setf (cdr (assoc 'selected-region-active minor-mode-map-alist))
+              selected-keymap)))))
 
 (defun selected--on ()
   (selected-region-active 1))

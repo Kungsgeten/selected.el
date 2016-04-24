@@ -5,5 +5,57 @@
 =selected-keymap= has no default bindings. Bind it yourself:
 
 #+BEGIN_SRC emacs-lisp
+(require 'selected)
+(define-key selected-keymap (kbd "q") #'selected-off)
 (define-key selected-keymap (kbd "u") #'upcase-region)
+(define-key selected-keymap (kbd "d") #'downcase-region)
+(define-key selected-keymap (kbd "w") #'count-words-region)
+(define-key selected-keymap (kbd "m") #'apply-macro-to-region-lines)
 #+END_SRC
+
+It is cleaner with [[https://github.com/jwiegley/use-package][use-package]]:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package selected
+    :commands selected-minor-mode
+    :bind (:map selected-keymap
+                ("q" . selected-off)
+                ("u" . upcase-region)
+                ("d" . downcase-region)
+                ("w" . count-words-region)
+                ("m" . apply-macro-to-region-lines)))
+#+END_SRC
+
+Then activate it with =M-x selected-minor-mode=. It can be a good idea to add =selected-minor-mode= to the hooks of the major-modes where you want it activated. =selected-off= is a function which deactivates the keybindings until the next time the region becomes active. This is useful when you want to execute a command on the region, but then disable =selected-minor-mode= in favour of other commands like [[https://github.com/magnars/multiple-cursors.el][multiple-cursors]].
+
+** Major mode specific bindings
+
+You may want some keybindings to operate on the region, but only if you're in a certain major-mode. This is possible if you create a keymap named =selected-<major-mode>-map= (for instance =selected-org-mode-map=) and add the mode-specific bindings there. Here's an example, using =use-package=:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package selected
+    :commands selected-minor-mode
+    :init
+    (setq selected-org-mode-map (make-sparse-keymap))
+    :bind (:map selected-keymap
+                ("q" . selected-off)
+                ("u" . upcase-region)
+                ("d" . upcase-region)
+                ("w" . count-words-region)
+                ("m" . apply-macro-to-region-lines)
+                :map selected-org-mode-map
+                ("t" . org-table-convert-region)))
+#+END_SRC
+
+* Recommended resources
+
+Here's some functions and packages that are useful with =selected.el=:
+
+- [[https://github.com/magnars/expand-region.el][expand-region]]
+- [[https://github.com/magnars/multiple-cursors.el][multiple-cursors]]
+- [[https://www.emacswiki.org/emacs/move-text.el][move-text]]
+- [[https://www.emacswiki.org/emacs/RandomizeBuffer][randomize-region]]
+- [[https://www.emacswiki.org/emacs/HighlightLibrary][highlight]]
+- [[https://github.com/Malabarba/emacs-google-this][google-this]] or [[https://github.com/xahlee/lookup-word-on-internet][lookup-word-on-internet]]
+
+Feel free to suggest additions to this list!
