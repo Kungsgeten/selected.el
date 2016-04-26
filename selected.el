@@ -6,7 +6,7 @@
 ;;; Commentary:
 
 ;; When `selected-minor-mode' is active, the keybindings in `selected-keymap'
-;; will be enabled when tne region is active.  This is useful for commands that
+;; will be enabled when the region is active.  This is useful for commands that
 ;; operates on the region, which you only want keybound when the region is
 ;; active.
 ;;
