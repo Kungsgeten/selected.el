@@ -3,6 +3,12 @@
 ;; Copyright (C) 2016 Erik Sjöstrand
 ;; MIT License
 
+;; Author: Erik Sjöstrand
+;; URL: http://github.com/Kungsgeten/selected.el
+;; Version: 1.00
+;; Keywords: convenience
+;; Package-Requires: ()
+
 ;;; Commentary:
 
 ;; When `selected-minor-mode' is active, the keybindings in `selected-keymap'
@@ -11,7 +17,14 @@
 ;; active.
 ;;
 ;; `selected-keymap' has no default bindings.  Bind it yourself:
+;; 
 ;; (define-key selected-keymap (kbd "u") #'upcase-region)
+;;
+;; You can also bind keys specific to a major mode, by creating a keymap named
+;; selected-<major-mode-name>-map:
+;; 
+;; (setq selected-org-mode-map (make-sparse-keymap))
+;; (define-key selected-org-mode-map (kbd "t") #'org-table-convert-region)
 
 ;;; Code:
 (defvar selected-keymap (make-sparse-keymap)
