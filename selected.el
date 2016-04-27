@@ -30,27 +30,27 @@
 (defvar selected-keymap (make-sparse-keymap)
   "Keymap for `selected-minor-mode'.  Add keys here that should be active when region is active.")
 
-(define-minor-mode selected-region-active
+(define-minor-mode selected-region-active-mode
   "Meant to activate when region becomes active.  Not intended for the user.  Use `selected-minor-mode'."
   :keymap selected-keymap
-  (when selected-region-active
+  (when selected-region-active-mode
     (let ((major-selected-map
            (intern-soft (concat "selected-" (symbol-name major-mode) "-map"))))
       (if major-selected-map
-          (setf (cdr (assoc 'selected-region-active minor-mode-map-alist))
+          (setf (cdr (assoc 'selected-region-active-mode minor-mode-map-alist))
                 (let ((map (eval major-selected-map)))
                   (set-keymap-parent map selected-keymap)
                   map))
-        (setf (cdr (assoc 'selected-region-active minor-mode-map-alist))
+        (setf (cdr (assoc 'selected-region-active-mode minor-mode-map-alist))
               selected-keymap)))))
 
 (defun selected--on ()
-  (selected-region-active 1))
+  (selected-region-active-mode 1))
 
 (defun selected-off ()
   "Disable bindings in `selected-keymap' temporarily."
   (interactive)
-  (selected-region-active -1))
+  (selected-region-active-mode -1))
 
 ;;;###autoload
 (define-minor-mode selected-minor-mode
