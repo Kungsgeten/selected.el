@@ -40,7 +40,7 @@ You may want some keybindings to operate on the region, but only if you're in a 
     :bind (:map selected-keymap
                 ("q" . selected-off)
                 ("u" . upcase-region)
-                ("d" . upcase-region)
+                ("d" . downcase-region)
                 ("w" . count-words-region)
                 ("m" . apply-macro-to-region-lines)
                 :map selected-org-mode-map
