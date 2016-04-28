@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand
 ;; URL: http://github.com/Kungsgeten/selected.el
-;; Version: 1.00
+;; Version: 1.01
 ;; Keywords: convenience
 ;; Package-Requires: ()
 
@@ -25,6 +25,9 @@
 ;; 
 ;; (setq selected-org-mode-map (make-sparse-keymap))
 ;; (define-key selected-org-mode-map (kbd "t") #'org-table-convert-region)
+;;
+;; There's also a global minor mode available: `selected-global-mode' if you
+;; want selected-minor-mode in all buffers.
 
 ;;; Code:
 (defvar selected-keymap (make-sparse-keymap)
@@ -63,6 +66,16 @@
     (remove-hook 'activate-mark-hook #'selected--on)
     (remove-hook 'deactivate-mark-hook #'selected-off)
     (selected-off)))
+
+(defun selected--global-on-p ()
+  "If `selected-global-mode' should activate in a new buffer."
+  (unless (minibufferp)
+    (selected-minor-mode 1)))
+
+;;;###autoload
+(define-globalized-minor-mode selected-global-mode
+  selected-minor-mode
+  selected--global-on-p)
 
 (provide 'selected)
 ;;; selected.el ends here
