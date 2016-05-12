@@ -17,6 +17,7 @@ It is cleaner with [[https://github.com/jwiegley/use-package][use-package]]:
 
 #+BEGIN_SRC emacs-lisp
   (use-package selected
+    :ensure t
     :commands selected-minor-mode
     :bind (:map selected-keymap
                 ("q" . selected-off)
@@ -34,6 +35,7 @@ You may want some keybindings to operate on the region, but only if you're in a 
 
 #+BEGIN_SRC emacs-lisp
   (use-package selected
+    :ensure t
     :commands selected-minor-mode
     :init
     (setq selected-org-mode-map (make-sparse-keymap))
