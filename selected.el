@@ -1,6 +1,6 @@
 ;;; selected.el --- Keymap for when region is active
 
-;; Copyright (C) 2016 Erik Sjöstrand
+;; Copyright (C) 2016--2017 Erik Sjöstrand
 ;; MIT License
 
 ;; Author: Erik Sjöstrand
@@ -17,12 +17,12 @@
 ;; active.
 ;;
 ;; `selected-keymap' has no default bindings.  Bind it yourself:
-;; 
+;;
 ;; (define-key selected-keymap (kbd "u") #'upcase-region)
 ;;
 ;; You can also bind keys specific to a major mode, by creating a keymap named
 ;; selected-<major-mode-name>-map:
-;; 
+;;
 ;; (setq selected-org-mode-map (make-sparse-keymap))
 ;; (define-key selected-org-mode-map (kbd "t") #'org-table-convert-region)
 ;;
@@ -33,6 +33,9 @@
 (defvar selected-keymap (make-sparse-keymap)
   "Keymap for `selected-minor-mode'.  Add keys here that should be active when region is active.")
 
+(defvar selected-minor-mode-override nil
+  "Put keys in `selected-keymap' into `minor-mode-overriding-map-alist'?")
+
 (define-minor-mode selected-region-active-mode
   "Meant to activate when region becomes active.  Not intended for the user.  Use `selected-minor-mode'."
   :keymap selected-keymap
@@ -40,11 +43,16 @@
     (let ((major-selected-map
            (intern-soft (concat "selected-" (symbol-name major-mode) "-map"))))
       (if major-selected-map
-          (setf (cdr (assoc 'selected-region-active-mode minor-mode-map-alist))
+          (setf (cdr (assoc 'selected-region-active-mode
+                            (if selected-minor-mode-override
+                                minor-mode-overriding-map-alist
+                              minor-mode-map-alist)))
                 (let ((map (eval major-selected-map)))
                   (set-keymap-parent map selected-keymap)
                   map))
-        (setf (cdr (assoc 'selected-region-active-mode minor-mode-map-alist))
+        (setf (cdr (assoc 'selected-region-active-mode (if selected-minor-mode-override
+                                                           minor-mode-overriding-map-alist
+                                                         minor-mode-map-alist)))
               selected-keymap)))))
 
 (defun selected--on ()
