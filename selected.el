@@ -50,8 +50,8 @@
                 selected-keymap)))
         (if selected-minor-mode-override
             (push `(selected-region-active-mode . ,map) minor-mode-overriding-map-alist)
-          (setf (cdr (assoc 'selected-region-active-mode map))
-                selected-keymap)))
+          (setf (cdr (assoc 'selected-region-active-mode minor-mode-map-alist))
+                map)))
     (setq minor-mode-overriding-map-alist
           (assq-delete-all 'selected-region-active-mode minor-mode-overriding-map-alist))))
 
