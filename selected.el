@@ -1,6 +1,6 @@
 ;;; selected.el --- Keymap for when region is active
 
-;; Copyright (C) 2016--2017 Erik Sjöstrand
+;; Copyright (C) 2016--2020 Erik Sjöstrand
 ;; MIT License
 
 ;; Author: Erik Sjöstrand
@@ -56,6 +56,7 @@
           (assq-delete-all 'selected-region-active-mode minor-mode-overriding-map-alist))))
 
 (defun selected--on ()
+  "Enable `selected-region-active-mode'."
   (selected-region-active-mode 1))
 
 (defun selected-off ()
@@ -69,6 +70,7 @@
   :lighter " sel"
   (if selected-minor-mode
       (progn
+        (if mark-active (selected--on))
         (add-hook 'activate-mark-hook #'selected--on)
         (add-hook 'deactivate-mark-hook #'selected-off))
     (remove-hook 'activate-mark-hook #'selected--on)
