@@ -30,6 +30,12 @@
 ;; want selected-minor-mode in all buffers.
 
 ;;; Code:
+(defcustom selected-ignore-modes
+  nil
+  "List of major modes for which selected will not be turned on."
+  :type '(repeat symbol)
+  :group 'selected)
+
 (defvar selected-keymap (make-sparse-keymap)
   "Keymap for `selected-minor-mode'.  Add keys here that should be active when region is active.")
 
@@ -71,15 +77,17 @@
   (if selected-minor-mode
       (progn
         (if mark-active (selected--on))
-        (add-hook 'activate-mark-hook #'selected--on)
-        (add-hook 'deactivate-mark-hook #'selected-off))
-    (remove-hook 'activate-mark-hook #'selected--on)
-    (remove-hook 'deactivate-mark-hook #'selected-off)
+        (add-hook 'activate-mark-hook #'selected--on 0 t)
+        (add-hook 'deactivate-mark-hook #'selected-off 0 t))
+    (remove-hook 'activate-mark-hook #'selected--on t)
+    (remove-hook 'deactivate-mark-hook #'selected-off t)
     (selected-off)))
 
 (defun selected--global-on-p ()
   "If `selected-global-mode' should activate in a new buffer."
-  (unless (minibufferp)
+  (unless (or (minibufferp)
+              (when selected-ignore-modes
+                (apply #'derived-mode-p selected-ignore-modes)))
     (selected-minor-mode 1)))
 
 ;;;###autoload
