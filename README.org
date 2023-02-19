@@ -51,6 +51,8 @@ You may want some keybindings to operate on the region, but only if you're in a 
                 ("t" . org-table-convert-region)))
 #+END_SRC
 
+If the major-mode specific keymap isn't found, derived from modes will be searched. For instance if you open an =org-mode= file, don't have =selected-org-mode-map= but do have a =selected-text-mode-map= then =selected-text-mode-map= will be used.
+
 * Installation and setup
 
 =selected.el= is on [[https://melpa.org/][MELPA]], so the easiest way is to install it from there using =M-x package-install=. MELPA needs to be in your =package-archives=:
@@ -76,3 +78,4 @@ Feel free to suggest additions to this list!
 * Changelog
 
 - 1.01 :: Added =selected-global-mode=.
+- 1.02 :: Derived modes now searches up the hierarchy for =selected-<major-mode>-map=.
